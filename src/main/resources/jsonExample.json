@@ -1,0 +1,16 @@
+{
+  "firstName": "Ivan",
+  "lastName": "Ivanov",
+  "hobbies": ["swiming", "movies", "snowboarding"],
+  "wife": {
+    "firstName": "Maria",
+    "lastName": "Ivanova",
+    "hobbies": ["series"],
+    "smoking": false
+  },
+  "children": [
+    {"firstName": "Petr", "lastName": "Ivanov"},
+    {"firstName": "Irina", "lastName": "Ivanova"}
+  ],
+  "smoking": true
+}

@@ -1,0 +1,8 @@
+{
+  "experiments": [
+    { "expirement1": [1.4, 2.8, 3.1, 6.2, 3.2] },
+    { "expirement2": [0.4, 2.1, 3.7, 7.2, 3.3] },
+    { "expirement3": [3.14, 2.1, 3.8, 7.6, 3.8] }
+  ],
+  "targetAvgDaily": [1, 3, 4, 5, 6]
+}
