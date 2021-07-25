@@ -39,5 +39,14 @@
         <servlet-name>CalculatorServlet</servlet-name>
         <url-pattern>/calc</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DayWeek</servlet-name>
+        <servlet-class>com.roman.DayWeek</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DayWeek</servlet-name>
+        <url-pattern>/dates</url-pattern>
+    </servlet-mapping>
 </web-app>
 
