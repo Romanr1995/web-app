@@ -14,24 +14,24 @@ public class DayWeek extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         LocalDate date = LocalDate.parse(req.getParameter("date"));
-        String dayEnglish = date.getDayOfWeek().toString();
+        DayOfWeek  dayEnglish = date.getDayOfWeek();
 
         String dayRussian;
 
         switch (dayEnglish) {
-            case "MONDAY":
+            case MONDAY:
                 dayRussian = "Понедельник";break;
-            case "TUESDAY":
+            case TUESDAY:
                 dayRussian = "Вторник";break;
-            case "WEDNESDAY":
+            case WEDNESDAY:
                 dayRussian = "Среда";break;
-            case "THURSDAY":
+            case THURSDAY:
                 dayRussian = "Четверг";break;
-            case "FRIDAY":
+            case FRIDAY:
                 dayRussian = "Пятница";break;
-            case "SATURDAY":
+            case SATURDAY:
                 dayRussian = "Суббота";break;
-            case "SUNDAY":
+            case SUNDAY:
                 dayRussian = "Воскресенье";break;
             default:
                 throw new RuntimeException();
