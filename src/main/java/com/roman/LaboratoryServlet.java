@@ -60,20 +60,20 @@ public class LaboratoryServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         JSONParser parser = new JSONParser();
 
-        JSONArray jsonArray;
+        JSONObject jsonObject;
         try (BufferedReader r = req.getReader()){
-            jsonArray = (JSONArray) parser.parse(r);
+            jsonObject = (JSONObject) parser.parse(r);
         } catch (ParseException e) {
             throw new ServletException(e);
         }
 
-        try (PrintWriter wr = resp.getWriter()){
-            for (Object o: jsonArray) {
-                Request request = Request.makeFromJson((JSONObject) o);
-                correctExperiment(request);
-
-            }
-        }
+//        try (PrintWriter wr = resp.getWriter()){
+//            for (Object o: jsonObject) {
+//                Request request = Request.makeFromJson((JSONObject) o);
+//                correctExperiment(request);
+//
+//            }
+//        }
     }
 
     public static void correctExperiment(Request r) {
@@ -103,8 +103,8 @@ public class LaboratoryServlet extends HttpServlet {
     }
 
     static class Request {
-        int experiments[][];
-        int targetAvgDaily[];
+        int[][] experiments;
+        int[] targetAvgDaily;
 
         static Request makeFromJson(JSONObject jsonObject) {
             Request req = new Request();

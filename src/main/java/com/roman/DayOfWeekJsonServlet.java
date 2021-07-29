@@ -17,6 +17,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/**
+ * [
+ *    {"date": "12.05.2007", "format": "dd.MM.yyyy"},
+ *    {"date": "25.05.2021", "format": "dd.MM.yyyy"},
+ *    {"date": "12/05/2007", "format": "dd/MM/yyyy"},
+ *    {"date": "05/12/2007", "format": "MM/dd/yyyy"}
+ * ]
+ */
 @WebServlet(name = "DayOfWeekJson", urlPatterns = "/dayOfWeekJson")
 public class DayOfWeekJsonServlet extends HttpServlet {
     @Override
