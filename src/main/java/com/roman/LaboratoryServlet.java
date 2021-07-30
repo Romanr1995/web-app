@@ -19,19 +19,19 @@ import java.io.PrintWriter;
  * see laboratoryExample.json
  * в experiments - данные по разным экспериментами в примере их коды - experiment1,experiment2 и т.д.
  * Массив чисел - это показатели в разные дни (1,2 и т.д)
- *
+ * <p>
  * Массив targetAvgDaily - это целевой средний показатель по всем эксперементам.
  * Размеры всех массивов в рамках 1го запроса равны.
- *
+ * <p>
  * Проверить что средние по всем экспериментам превышает или равен целевом.
- *
+ * <p>
  * Если это так то вернуть ответ: OK!
  * иначе вернуть таблицу из 3 колонок: первая порядковый номер дня в котором есть несоответствие,
  * вторая актуальное сред значение, целевое среднее значение
- *
+ * <p>
  * отправка POST через curl:
  * curl -d "@data.json" -X POST localhost:8080/blabla
- *
+ * <p>
  * ссылка на тренер HTML:
  * https://www.w3schools.com/html/tryit.asp?filename=tryhtml_table
  * пример таблицы:
@@ -61,31 +61,28 @@ public class LaboratoryServlet extends HttpServlet {
         JSONParser parser = new JSONParser();
 
         JSONObject jsonObject;
-        try (BufferedReader r = req.getReader()){
+        try (BufferedReader r = req.getReader()) {
             jsonObject = (JSONObject) parser.parse(r);
         } catch (ParseException e) {
             throw new ServletException(e);
         }
+        resp.setContentType("text/html");
+        try (PrintWriter wr = resp.getWriter()) {
+            Request request = Request.makeFromJson((JSONObject) jsonObject);
+            wr.println(correctExperiment(request));
 
-//        try (PrintWriter wr = resp.getWriter()){
-//            for (Object o: jsonObject) {
-//                Request request = Request.makeFromJson((JSONObject) o);
-//                correctExperiment(request);
-//
-//            }
-//        }
+        }
     }
 
-    public static void correctExperiment(Request r) {
-        double summ = 0;
+    public static String correctExperiment(Request r) {
+        double sum = 0;
 
         for (int i = 0; i < r.targetAvgDaily.length; i++) {
             for (int k = 0; k < r.experiments.length; k++) {
-                summ+=r.experiments[k][i];
+                sum += r.experiments[k][i];
             }
-            if (summ/r.experiments.length <  r.targetAvgDaily[i]) {
-
-                System.out.println("<table style=\"width:100%\">\n" +
+            if (sum < r.targetAvgDaily[i]) {
+                return "<table style=\"width:100%\">\n" +
                         "    <tr>\n" +
                         "      <th>День с отклонением</th>\n" +
                         "      <th>Среднее значение экспериментов</th>\n" +
@@ -93,23 +90,23 @@ public class LaboratoryServlet extends HttpServlet {
                         "    </tr>\n" +
                         "    <tr>\n" +
                         "      <td>" + (i + 1) + "</td>\n" +
-                        "      <td>" + summ/r.experiments.length  + "</td>\n" +
+                        "      <td>" + sum / r.experiments.length + "</td>\n" +
                         "      <td>" + r.targetAvgDaily[i] + "</td>\n" +
                         "    </tr>\n" +
-                        " </table>");
+                        " </table>";
             }
         }
-        System.out.println("OK");
+        return "OK";
     }
 
     static class Request {
-        int[][] experiments;
-        int[] targetAvgDaily;
+        Double[][] experiments;
+        Double[] targetAvgDaily;
 
         static Request makeFromJson(JSONObject jsonObject) {
             Request req = new Request();
-            req.experiments = (int[][]) jsonObject.get("experiments");
-            req.targetAvgDaily = (int[]) jsonObject.get("targetAvgDaily");
+            req.experiments = (Double[][]) jsonObject.get("experiments");
+            req.targetAvgDaily = (Double[]) jsonObject.get("targetAvgDaily");
             return req;
         }
     }
