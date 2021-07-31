@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * приходит запрос с экспериментальными данными
@@ -58,19 +61,23 @@ import java.io.PrintWriter;
 public class LaboratoryServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        JSONParser parser = new JSONParser();
+        try {
+            JSONParser parser = new JSONParser();
 
-        JSONObject jsonObject;
-        try (BufferedReader r = req.getReader()) {
-            jsonObject = (JSONObject) parser.parse(r);
-        } catch (ParseException e) {
+            JSONObject jsonObject;
+            try (BufferedReader r = req.getReader()) {
+                jsonObject = (JSONObject) parser.parse(r);
+            } catch (ParseException e) {
+                throw new ServletException(e);
+            }
+            resp.setContentType("text/html");
+            try (PrintWriter wr = resp.getWriter()) {
+                Request request = Request.makeFromJson(jsonObject);
+                wr.println(correctExperiment(request));
+            }
+
+        } catch (Exception e) {
             throw new ServletException(e);
-        }
-        resp.setContentType("text/html");
-        try (PrintWriter wr = resp.getWriter()) {
-            Request request = Request.makeFromJson((JSONObject) jsonObject);
-            wr.println(correctExperiment(request));
-
         }
     }
 
@@ -105,8 +112,30 @@ public class LaboratoryServlet extends HttpServlet {
 
         static Request makeFromJson(JSONObject jsonObject) {
             Request req = new Request();
-            req.experiments = (Double[][]) jsonObject.get("experiments");
-            req.targetAvgDaily = (Double[]) jsonObject.get("targetAvgDaily");
+            int c = 0;
+            int b = 0;
+//            JSONObject o = (JSONObject) jsonObject.get("experiments");
+            JSONArray ar = (JSONArray) jsonObject.get("targetAvgDaily");
+
+            for (int i = 0; i < ar.toString().length(); i ++) {
+                req.targetAvgDaily[i] = Double.parseDouble(ar.get(i).toString());
+                c++;
+            }
+            JSONArray jsonArray = (JSONArray) jsonObject.get("experiments");
+            for (int j = 0; j < jsonArray.size(); j++) {
+                String str = jsonArray.get(j).toString().substring(15);
+                for (int p = 0; p < str.length(); p += 3) {
+                    req.experiments[j][p] = Double.parseDouble(str.substring(p, p + 1));
+                }
+            }
+//            Set<String> key = o.keySet();
+//            for (String s : key) {
+//                String a = o.get(s).toString();
+//                for (int k = 0; k <= a.length(); k+=3) {
+//                    req.experiments[b][k] = Double.parseDouble(a.substring(k, k + 1));
+//                    b++;
+//                }
+//            }
             return req;
         }
     }
