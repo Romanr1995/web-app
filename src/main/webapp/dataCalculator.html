@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<script type="text/javascript">
+    function printHelloWorld() {
+        console.log("Hello, World");
+    }
+
+    function makeRequest() {
+        let xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("load", processResponse)
+
+        let input1 = document.getElementById("input1")
+        xhr.open("GET", "/dates?date=" + input1.value)
+
+        xhr.send()
+
+    }
+
+    function processResponse() {
+        let text = document.getElementById("text1")
+
+        text.innerText = this.responseText
+    }
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Мое приложение!</title>
+</head>
+<body>
+<div>
+    <textarea id="text1" readonly>text</textarea>
+</div>
+
+<div>
+    <label for="input1">Введите дату в формте yyyy-MM-dd</label>
+    <input id="input1" type="text">
+    <button onclick="makeRequest()">Button!</button>
+</div>
+</body>
+
+</html>

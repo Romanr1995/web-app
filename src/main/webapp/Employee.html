@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<script type="text/javascript">
+  function makeRequest() {
+    document.getElementById("errLbl").hidden = true
+
+    let xhr = new XMLHttpRequest();
+
+    xhr.addEventListener("load", processResponse)
+    xhr.addEventListener("error", processError)
+    xhr.open("POST", "/emp/add")
+
+    let data = {
+      name: document.getElementById("nameInput").value,
+      birthday: document.getElementById("bdInput").value,
+      position: document.getElementById("positionInput").value
+    }
+
+    xhr.send(JSON.stringify(data))
+
+
+
+  }
+
+  function processResponse() {
+    if (this.status === 200) {
+      document.getElementById("tableId").innerHTML = this.response
+    } else {
+      document.getElementById("errLbl").hidden = false
+    }
+  }
+
+  function processError() {
+
+  }
+</script>
+<head>
+    <meta charset="UTF-8">
+    <title>Список Сотрудников</title>
+</head>
+<body>
+
+<div>
+  <label for="nameInput"></label>Имя<input name="Имя" id="nameInput">
+  <label for="bdInput"></label>День рождения<input name="День рождения" id="bdInput" type="date">
+  <label for="positionInput">Должность</label><input name="Должность" id="positionInput">
+  <button name="Add" onclick="makeRequest()">Добавить</button>
+  <label id="errLbl" hidden>ошибка выполнения запроса!</label>
+</div>
+
+<div>
+  <table id="tableId" style="width: auto">
+    <tr>
+      <th>Имя</th>
+      <th>День Рождения</th>
+      <th>Должность</th>
+    </tr>
+  </table>
+</div>
+</body>
+</html>
