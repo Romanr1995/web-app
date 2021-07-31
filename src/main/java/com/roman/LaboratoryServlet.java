@@ -112,30 +112,35 @@ public class LaboratoryServlet extends HttpServlet {
 
         static Request makeFromJson(JSONObject jsonObject) {
             Request req = new Request();
-            int c = 0;
-            int b = 0;
-//            JSONObject o = (JSONObject) jsonObject.get("experiments");
-            JSONArray ar = (JSONArray) jsonObject.get("targetAvgDaily");
 
-            for (int i = 0; i < ar.toString().length(); i ++) {
-                req.targetAvgDaily[i] = Double.parseDouble(ar.get(i).toString());
-                c++;
+            JSONArray targetAvgDaily = (JSONArray) jsonObject.get("targetAvgDaily");// ArrayList<Number>
+
+            req.targetAvgDaily = new Double[targetAvgDaily.size()];
+
+            int i = 0;
+            for (Object o: targetAvgDaily) {
+                req.targetAvgDaily[i++] = ((Number) o).doubleValue();
             }
-            JSONArray jsonArray = (JSONArray) jsonObject.get("experiments");
-            for (int j = 0; j < jsonArray.size(); j++) {
-                String str = jsonArray.get(j).toString().substring(15);
-                for (int p = 0; p < str.length(); p += 3) {
-                    req.experiments[j][p] = Double.parseDouble(str.substring(p, p + 1));
+
+            JSONArray experiments = (JSONArray) jsonObject.get("experiments");//ArrayList<JSONObject>
+
+            req.experiments = new Double[experiments.size()][];
+
+            for (int j = 0; j < experiments.size(); j++) {
+                JSONObject exp = (JSONObject) experiments.get(j);
+
+                for (Object value : exp.values()) {
+                    JSONArray expValues = (JSONArray) value;//ArrayList<Number>
+
+                    req.experiments[j] = new Double[expValues.size()];
+
+                    int k = 0;
+                    for (Object expValue : expValues) {
+                        req.experiments[j][k++] = ((Number) expValue).doubleValue();
+                    }
                 }
+
             }
-//            Set<String> key = o.keySet();
-//            for (String s : key) {
-//                String a = o.get(s).toString();
-//                for (int k = 0; k <= a.length(); k+=3) {
-//                    req.experiments[b][k] = Double.parseDouble(a.substring(k, k + 1));
-//                    b++;
-//                }
-//            }
             return req;
         }
     }
