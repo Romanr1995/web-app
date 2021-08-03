@@ -33,14 +33,13 @@ public class LogAppServlet extends HttpServlet {
             LoginAndPswRequest loginAndPswRequest = mapper.readValue(req.getReader(), LoginAndPswRequest.class);
 
             String savedPsw = logAndPsw.get(loginAndPswRequest.login);
+            resp.setContentType("text/html");
             if (loginAndPswRequest.password != null && loginAndPswRequest.password.equals(savedPsw)) {
-
-                resp.setContentType("text/html");
                 try (PrintWriter wr = resp.getWriter()) {
                     wr.append("Пароль и логин введены верно.Вход в систему выполнен");
                 }
             } else {
-                resp.sendError(450, "Неверный логин или пароль");
+                resp.sendError(403, "Неверный логин или пароль");
             }
 
         } catch (Exception e) {
