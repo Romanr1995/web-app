@@ -8,7 +8,7 @@
     function makeRequest() {
         let xhr = new XMLHttpRequest();
 
-        xhr.addEventListener("load", processResponse)
+        xhr.addEventListener("load", processResponse())
 
         let input1 = document.getElementById("input1")
         xhr.open("GET", "/dates?date=" + input1.value)
